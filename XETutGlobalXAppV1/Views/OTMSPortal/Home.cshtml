@@ -1,0 +1,74 @@
+﻿@*
+ _OTMLPortalMasterLayout   For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model XEtutGlobalX.Modal.XETutGlobalX_DB.Response.UserProfile.clsUserProfileModel
+@{
+
+    ViewData["Login_Username"] = "";
+    if (Model != null)
+    {
+        if (Model.UserProfile != null)
+        {
+            foreach (XEtutGlobalX.Modal.XETutGlobalX_DB.Response.UserProfile.UserProfile up in Model.UserProfile)
+            {
+                ViewData["Login_Username"] = up.FName + " " + up.LName;
+                ViewData["Login_User_Avtaar"] = up.FName![0].ToString() + up.LName![0].ToString();
+                ViewData["Login_Gender"] = up.Gender;
+                ViewData["Login_Designation"] = up.Designation;
+                ViewData["Login_Designation_Code"] = up.Designation_Code;
+                ViewData["Login_FirstName"] = up.FName;
+                ViewData["Login_ProfilePhoto"] = up.ProfilePhoto;
+                ViewData["LoggedInType"] = up.LoginType;
+                ViewData["ActiveHomeLeftMenu"] = "otms-leftpanel";
+                ViewData["Active" + @ViewData["LoggedInType"] + "Dashboard" + "LeftMenu"] = "";
+                ViewData["ActiveInstructorDashboardLeftMenu"] = "";
+
+            }
+        }
+    }
+    //ViewData["ActiveHomeTab"] = "Active-item";
+    //ViewData["ActivePrivacyTab"] = "";
+    Layout = "_OTMLPortalMasterLayout";
+}
+<div class="HomePageSearchContainer_homePageSearchContainer">
+    <div class="HomePageSearchContainer_homePageSearchContainer_heading">
+        @{
+            if (ViewData["Login_FirstName"] != null)
+            {
+                <span>@XETutGlobalXAppV1.AppCode.XETutGlobalX.OTMSPortal.Common.HelloLabel @ViewData["Login_FirstName"], </span>
+                <div>
+                <span>
+                        @XETutGlobalXAppV1.AppCode.XETutGlobalX.OTMSPortal.Common.HomeLoginWelcomeMessageLabel2
+                </span>
+                </div>
+            }
+            else
+            {
+                <span>@XETutGlobalXAppV1.AppCode.XETutGlobalX.OTMSPortal.Common.HomeWelcomeMessageLabel2</span>
+            }
+        }
+        
+    </div>
+    <div>
+        <input type="text" class="form-control border iXpertLibSearch " placeholder="Search Courses, eBooks and Tutorials..." />
+        <img src="~/Images/search.svg" class="iXpert-Search-icon" />
+    </div>
+    <div class="container">
+        <div class="list-group">
+            <div class="card-header row">
+                
+                <div class="col align-content-center">
+                    <span class="courses-header-card">@XETutGlobalXAppV1.AppCode.XETutGlobalX.OTMSPortal.Common.CoursesCardHeaderlabel</span>
+                </div>
+                <div class="col text-end align-content-center">
+                    <button type="button" class="btn btn_header_menu btn-light btn-sm text-primary">
+                        View All
+                    </button>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>

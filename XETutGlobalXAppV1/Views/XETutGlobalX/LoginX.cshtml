@@ -1,0 +1,177 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Login Page";
+    Layout = "_Layout";
+}
+<script>
+    document.querySelectorAll('#myForm input').forEach((input, index, inputs) => {
+        input.addEventListener('keydown', (event) => {
+            if (!(event.key.length === 1)) { // Check if the key is a character
+                if (input.value.length >= input.maxLength - 1) {
+                    event.preventDefault(); // Prevent the default action
+                    const nextInput = inputs[(index + 1) % inputs.length];
+                    nextInput.focus();
+                }
+            }
+        });
+    });
+</script>
+<style>
+    .otp-field {
+        flex-direction: row;
+        column-gap: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .otp-field input {
+            height: 45px;
+            width: 42px;
+            border-radius: 6px;
+            outline: none;
+            font-size: 1.125rem;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+            .otp-field input:focus {
+                box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+            }
+
+            .otp-field input::-webkit-inner-spin-button,
+            .otp-field input::-webkit-outer-spin-button {
+                display: none;
+            }
+
+    .resend {
+        font-size: 12px;
+    }
+
+    
+</style>
+<div class="container">
+    <div class="card-body flex-row text-center mt-3">
+        <div class="row">
+            
+            <div class="col">
+                <div class="row">
+                    <div class="col-md-2">
+
+                    </div>
+                    <div class="card bg-white col-md-8 XETutglobalX-Login-rounded">
+                        <div class="card-header text-center mt-3 font-xetutglobalx-default card-header-rounded-top align-middle">
+                            <h5>Sign in to OTMS Account Portal</h5>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div id="login-fill-div" class="flex-fill">
+                                <table class="table table-responsive-lg table-borderless">
+                                    <tbody>
+                                        <tr style="text-align: justify;">
+                                            <td colspan="5" class="align-middle">Username:</td>
+                                            <td>
+                                                <div class="input-group">
+
+                                                    <input id="txtusername" type="text" class="form-control" placeholder="Enter username" required>
+                                                </div>
+                                            </td>
+                                            
+                                        </tr>
+                                        <tr style="text-align: justify;">
+                                            <td colspan="5" class="align-middle">EmailID:</td>
+                                            <td>
+                                                <div class="input-group">
+                                                    <input id="txtemail" type="email" class="form-control" placeholder="Enter email ID" required>
+                                                </div>
+                                            </td>
+                                            
+                                        </tr>
+                                        <tr style="text-align: justify;">
+                                            <td colspan="5" class="align-middle">Password:</td>
+                                            <td>
+                                                <div class="input-group">
+                                                    <input id="txtpassword" type="password" class="form-control" placeholder="Enter password" required>
+                                                </div>
+                                            </td>
+                                            
+                                        </tr>
+                                        
+                                        <tr style="text-align: justify;">
+                                            <td colspan="5" class="align-middle"><a id="btnRecoveryPassword" class="text-link text-decoration-underline pointer-cursor">Forgot Password?</a></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onclick="ShowPassword()">
+                                                    <label id="lblShowPassword" class="form-check-label" for="flexCheckDefault">
+                                                        Show Password
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" >
+                                                    <label id="lblShowPassword" class="form-check-label" for="flexCheckDefault">
+                                                        Reminder
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            
+                                        </tr>
+                                        <tr style="text-align: justify;">
+                                            <td colspan="5" class="text-start"><a id="btnReset" class="btn btn-XeTutKonnect btn-XeTutKonnect-primary font-xetutglobalx-default font-weight-bold" onclick="ClearField()">Reset</a></td>
+                                            <td class="text-end">
+                                                <button id="btnXETutGlobalX_Login" type="button" class="btn btn-XeTutKonnect ld-ext-right btn-XeTutKonnect-primary font-xetutglobalx-default font-weight-bold d-inline-flex" onclick="loginValidation(this);">
+                                                    <div id="Loader_spin" class="d-none mx-1"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div>
+                                                    <span id="spnLoginLabel">Login</span>
+                                                    <span id="spnloading" class="d-none"> Loading...</span>
+                                                </button>
+                                                
+                                                
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="otp-verification-div" class="d-none">
+                                <section class="container-fluid bg-body-tertiary d-block">
+                                    <div class="row justify-content-center">
+                                        <div class="card-body p-5 text-center">
+                                            <h4>Verify</h4>
+                                            <p>Your code was sent to you via email</p>
+
+                                            <div class="otp-field mb-4">
+                                                <form id="myForm" class="d-contents">
+                                                    <input type="text" id="input1" maxlength="1">
+                                                    <input type="text" id="input2" maxlength="1">
+                                                    <input type="text" id="input3" maxlength="1">
+                                                    <input type="text" id="input4" maxlength="1">
+                                                    <input type="text" id="input5" maxlength="1">
+                                                    <input type="text" id="input6" maxlength="1">
+
+                                                </form>
+                                            </div>
+
+                                            <button class="btn btn-primary mb-3 btn btn-XeTutKonnect btn-XeTutKonnect-primary font-xetutglobalx-default font-weight-bold" onclick="VerifyOtp('input1','input2','input3','input4','input5','input6');">
+                                                Verify
+                                            </button>
+
+                                            <p class="resend text-muted mb-0">
+                                                Didn't receive code? <a href="">Request again</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                    </div>
+                </div>
+                
+                
+            </div>
+            
+        </div>
+    </div>
+</div>

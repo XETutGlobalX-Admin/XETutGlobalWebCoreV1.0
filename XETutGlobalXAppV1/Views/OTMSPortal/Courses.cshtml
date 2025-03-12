@@ -1,0 +1,135 @@
+﻿@model XEtutGlobalX.Modal.XETutGlobalX_DB.Response.Courses.clsCoursesModel
+@{
+    if (Model != null)
+    {
+        if (Model.clsUserProfileModel != null && Model.clsUserProfileModel.UserProfile!=null)
+        {
+            
+            foreach (XEtutGlobalX.Modal.XETutGlobalX_DB.Response.UserProfile.UserProfile up in Model.clsUserProfileModel.UserProfile)
+            {
+                ViewData["Login_UID"] = up.UID;
+                ViewData["Login_Username"] = up.FName + " " + up.LName;
+                ViewData["Login_User_Avtaar"] = up.FName![0].ToString() + up.LName![0].ToString();
+                ViewData["Login_Gender"] = up.Gender;
+                ViewData["Login_Designation"] = up.Designation;
+                ViewData["Login_Designation_Code"] = up.Designation_Code;
+                ViewData["Login_FirstName"] = up.FName;
+                ViewData["Login_MiddleName"] = up.MName;
+                ViewData["Login_Gender"] = up.Gender;
+                ViewData["Login_Gender"] = up.Gender;
+                ViewData["Login_EmailID"] = up.EmailID;
+                ViewData["Login_DOB"] = up.DOB;
+                ViewData["Login_Country"] = up.Country;
+                ViewData["Login_StateCode"] = up.State;
+                ViewData["Login_CityCode"] = up.City;
+                ViewData["Login_ProfilePhoto"] = up.ProfilePhoto;
+                ViewData["Login_LastName"] = up.LName;
+                ViewData["LoggedInType"] = up.LoginType;
+                ViewData["Login_PinCode"] = up.Pincode;
+                ViewData["Login_Current_Addr"] = up.Address;
+                ViewData["Login_PhoneNumber"] = up.Contact;
+                ViewData["Login_PhoneCode"] = up.phone_code.Split(" ")[1];
+
+                ViewData["ActiveHomeLeftMenu"] = "";
+                ViewData["Active" + @ViewData["LoggedInType"] + "Dashboard" + "LeftMenu"] = "";
+                ViewData["ActiveInstructorDashboardLeftMenu"] = "";
+
+            }
+
+            if (Model.clsUserProfileModel.countryStateDetails != null)
+            {
+                if (Model.clsUserProfileModel.countryStateDetails.countries != null)
+                {
+                    foreach (var csd in Model.clsUserProfileModel.countryStateDetails.countries)
+                    {
+                        if (csd.iso2 == ViewData["Login_Country"]!.ToString())
+                        {
+                            ViewData["Login_CountryValue"] = csd.name;
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+
+    Layout = "_OTMLPortalMasterLayout";
+}
+<div class="pt-3 mb-5 _OTMS-Background-playground-Courses">
+    <div class="container-lg">
+        <div class="card-header dx-card pt-0 pb-0">
+            <div class=" dx-fieldset-header mb-0 dx-field-label w-100" style="font-weight: 700!important;">
+                @XETutGlobalXAppV1.AppCode.XETutGlobalX.OTMSPortal.Common.Coursesheader_label
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 col-lg-4 dx-card align-content-center">
+                    <div style="max-width: 540px;">
+                        <div class="row g-0">
+                            <div class="col-md-4 align-content-center">
+                                <img src="~/Images/Courses/course-enrollment-abstract-concept-vector-illustration_107173-37917.jpg" class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-8 align-content-center">
+                                <div class="card-body">
+                                    <h3 class="card-title" style="font-weight: 700!important;">Enrolled Courses</h3>
+                                    <p class="card-text">Enroll in Courses to Enhance Your Skills and Learn More.</p>
+                                    <p class="card-text"><small class="text-muted"></small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-lg-4 dx-card align-content-center">
+                    <div style="max-width: 540px;">
+                        <div class="row g-0">
+                            <div class="col-md-4 align-content-center">
+                                <img src="~/Images/Courses/courses-icon-20.png" class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-8 align-content-center">
+                                <div class="card-body">
+                                    <h3 class="card-title" style="font-weight: 700!important;">Course Lists</h3>
+                                    <p class="card-text">
+                                        To provide you with a list of courses, I'll need a bit more information.
+                                    </p>
+                                    <p class="card-text"><small class="text-muted"></small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-lg-4 dx-card align-content-center">
+                    <div style="max-width: 540px;">
+                        <div class="row g-0">
+                            <div class="col-md-4 align-content-center">
+                                <img src="~/Images/Courses/New-Course-Icon-01.png" class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-md-8 align-content-center">
+                                <div class="card-body">
+                                    <h3 class="card-title" style="font-weight: 700!important;">New Arrival</h3>
+                                    <p class="card-text">
+                                        <span>Discover the Latest Courses: Your Path to New Knowledge Awaits</span>
+                                    </p>
+                                   
+                                    <p class="card-text"><small class="text-muted"></small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                
+
+            </div>
+        </div>
+    </div>
+    
+    
+</div>
+
+
+
+
+

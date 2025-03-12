@@ -1,0 +1,569 @@
+﻿@model XEtutGlobalX.Modal.XETutGlobalX_DB.Response.UserProfile.clsUserProfileModel
+@{
+    ViewData["Login_Username"] = "";
+    if (Model != null)
+    {
+        if (Model.UserProfile != null)
+        {
+            foreach (XEtutGlobalX.Modal.XETutGlobalX_DB.Response.UserProfile.UserProfile up in Model.UserProfile)
+            {
+                ViewData["Login_UID"] = up.UID;
+                ViewData["Login_Username"] = up.FName + " " + up.LName;
+                ViewData["Login_User_Avtaar"] = up.FName![0].ToString() + up.LName![0].ToString();
+                ViewData["Login_Gender"] = up.Gender;
+                ViewData["Login_Designation"] = up.Designation;
+                ViewData["Login_Designation_Code"] = up.Designation_Code;
+                ViewData["Login_FirstName"] = up.FName;
+                ViewData["Login_MiddleName"] = up.MName;
+                ViewData["Login_Gender"] = up.Gender;
+                ViewData["Login_Gender"] = up.Gender;
+                ViewData["Login_EmailID"] = up.EmailID;
+                ViewData["Login_DOB"] = up.DOB;
+                ViewData["Login_Country"] = up.Country;
+                ViewData["Login_StateCode"] = up.State;
+                ViewData["Login_CityCode"] = up.City;
+                ViewData["Login_ProfilePhoto"] = up.ProfilePhoto;
+                ViewData["Login_LastName"] = up.LName;
+                ViewData["LoggedInType"] = up.LoginType;
+                ViewData["Login_PinCode"] = up.Pincode;
+                ViewData["Login_Current_Addr"] = up.Address;
+                ViewData["Login_PhoneNumber"] = up.Contact;
+                ViewData["Login_PhoneCode"] = up.phone_code.Split(" ")[1];
+                 
+                ViewData["ActiveHomeLeftMenu"] = "";
+                ViewData["Active" + @ViewData["LoggedInType"] + "Dashboard" + "LeftMenu"] = "";
+                ViewData["ActiveInstructorDashboardLeftMenu"] = "";
+
+            }
+        }
+        if (Model.countryStateDetails != null)
+        {
+            if (Model.countryStateDetails.countries != null)
+            {
+                foreach (var csd in Model.countryStateDetails.countries)
+                {
+                    if (csd.iso2 == ViewData["Login_Country"]!.ToString())
+                    {
+                        ViewData["Login_CountryValue"] = csd.name;
+                    }
+                }
+            }
+        }
+    }
+    
+    //ViewData["ActiveHomeTab"] = "Active-item";
+    //ViewData["ActivePrivacyTab"] = "";
+    Layout = "_OTMLPortalMasterLayout";
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/23.1.1/js/intlTelInput.js" integrity="sha512-1hPsZskD97AX2Z6rr5cpdEjhcDA/MlS0JkBUA2phuFwzJ4L2niExPgqaqXaOzc05dA9qWM+YV2LjUnpqsmJR7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/js/flag-emoji.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/23.1.1/js/utils.js" integrity="sha512-01a9h/cXBJn79EU1Ov7aaduszDketBgmKQowdSR1c1on1Wzh1kKvHcsC+ToUBZJqRArdXLOAALfREsqw+Ri9bg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link href="flags/css/flag-icons.css" type="text/html" />
+<style>
+    .scroll-y-height-322{
+        overflow-y: scroll;
+        height: 322px;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //console.log("Hello World!");
+        sessionStorage.setItem("SelectedCountry", '@ViewData["Login_Country"].ToString()');
+        LoadCountryState_Control();
+        if ('@ViewData["Login_Country"].ToString()'!=""){
+            BindSelectedCountryState('@ViewData["Login_Country"].ToString()')
+        }
+        if ('@ViewData["Login_StateCode"].ToString()' != "" && '@ViewData["Login_Country"].ToString()' != "") {
+            BindSelectedCountryStateCity('@ViewData["Login_StateCode"].ToString()', '@ViewData["Login_Country"].ToString()')
+        }
+        
+        
+        
+        BindDesignationDropDown();
+        var input = document.querySelector("#txt_Phone_Number");
+        intlTelInput(input, {
+            initialCountry: "auto",
+
+            geoIpLookup: function (success, failure) {
+                $.get("https://ipinfo.io", function () { }, "jsonp").always(function (resp) {
+                    var countryCode = (resp && resp.country) ? resp.country : "";
+                    success(countryCode);
+                });
+            },
+            utilsScript: "js/utils.js"
+        });
+
+    });
+    function selectElement(id, valueToSelect) {
+        let element = document.getElementById(id);
+        element.value = valueToSelect;
+    }
+
+    function BindSelectedCountryStateCity(stateCode, countryCode) {
+        debugger;
+        //citySet
+        var serviceURL = '/XETutGlobalX/BindCity';
+        $.ajax({
+            type: "POST",
+            url: serviceURL,
+            data: { StateCode: stateCode, CountryCode: countryCode },
+            //contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                debugger;
+                let city_row = '';
+                if (data.isSuccess != false) {
+                    if (data.citySet != null) {
+                        //drp_State
+                        if (data.citySet != null) {
+                            city_row = city_row + "<option selected value='0'>Select City</option>"
+
+                            for (let index = 0; index < data.citySet.length; index++) {
+                                if ('@ViewData["Login_CityCode"]' == data.citySet[index].code) {
+                                    city_row = city_row + "<option selected value='" + data.citySet[index].code + "'>" + data.citySet[index].name + "</option>";
+                                }
+                                else {
+                                    city_row = city_row + "<option value='" + data.citySet[index].code + "'>" + data.citySet[index].name + "</option>";
+                                }
+                                
+                                
+                            }
+                            $("#drp_City").html(city_row);
+                        }
+                    }
+                }
+            },
+            error: errorFunc
+        });
+    }
+
+    function BindSelectedCountryState(countrycode) {
+        debugger;
+        
+        var serviceURL = '/XETutGlobalX/BindState';
+        $.ajax({
+            type: "POST",
+            url: serviceURL,
+            data: { CountryCode: countrycode },
+            //contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                debugger;
+                let state_row = '';
+                if (data.isSuccess != false) {
+                    if (data.stateDetails != null) {
+                        //drp_State
+                        if (data.stateDetails != null) {
+                            state_row = state_row + "<option selected value='0'>Select State</option>"
+                            let stateSelected = '';
+                            for (let index = 0; index < data.stateDetails.length; index++) {
+                                if ('@ViewData["Login_StateCode"]'!= null) {
+                                    if ('@ViewData["Login_StateCode"]' == data.stateDetails[index].state_code) {
+                                        state_row = state_row + "<option selected value='" + data.stateDetails[index].state_code + "'>" + data.stateDetails[index].name + "</option>";
+                                    }
+                                    else {
+                                        state_row = state_row + "<option value='" + data.stateDetails[index].state_code + "'>" + data.stateDetails[index].name + "</option>";
+                                    }
+                                }
+                                else{
+                                    state_row = state_row + "<option value='" + data.stateDetails[index].state_code + "'>" + data.stateDetails[index].name + "</option>";
+                                }
+                                
+                            }
+                            $("#drp_State").html(state_row);
+                        }
+                    }
+                }
+            },
+            error: errorFunc
+        });
+    }
+</script>
+<div class="container-lg mt-3 mb-5">
+    <div class="card-header dx-card pt-0 pb-0">
+        <div class="dx-fieldset-header mb-0 dx-field-label w-100">
+            @XETutGlobalXAppV1.AppCode.XETutGlobalX.OTMSPortal.Common.ProfileMgmtheader_label:  @XETutGlobalXAppV1.AppCode.XETutGlobalX.OTMSPortal.Common.EditUserProfileheader_label
+        </div>
+       
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 col-lg-3 text-center dx-card p-3 me-3">
+                <div class="dx-card">
+                    <span class="dx-fieldset-header">Profile Picture</span>
+                </div>
+                <input type="hidden" id="hdn_login_UserID" value="@ViewData["Login_UID"]" />
+                <!--Avatar-->
+                <div class="card-body">
+                    <div class="mb-4 d-flex justify-content-center">
+
+                        @if (ViewData["Login_ProfilePhoto"] != null && ViewData["Login_ProfilePhoto"].ToString() != "")
+                        {
+                            
+                            <img id="profile_Avtaar" src="@ViewData["Login_ProfilePhoto"]" class="rounded-circle" alt="example placeholder" style="width: 200px;height: 200px;" />
+                        }
+                        else
+                        {
+                            @if (ViewData["Login_Gender"] != null && ViewData["Login_Gender"]!.ToString() == "M")
+                            {
+
+                                <img id="profile_Avtaar" src="~/Images/profile.png" class="rounded-circle" alt="example placeholder" style="width: 200px;height: 200px;" />
+                            }
+                            else if (ViewData["Login_Gender"] != null && ViewData["Login_Gender"]!.ToString() == "F")
+                            {
+
+                                <img id="profile_Avtaar" src="~/Images/woman.png" class="rounded-circle" alt="example placeholder" style="width: 200px;height: 200px;" />
+                            }
+                        }
+
+                        
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div data-mdb-ripple-init class="btn btn-header-menu btn-primary btn-rounded">
+                            <label class="form-label text-white m-1" for="customFile1">Choose file</label>
+                            <input type="file" class="form-control d-none" id="customFile1" onchange="displaySelectedImage(event, 'profile_Avtaar')" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col dx-card p-3">
+                <div class="dx-card mb-3 text-center">
+                    <span class="dx-fieldset-header">Personal Information</span>
+                </div>
+                <div class="dx-card p-3">
+                    <div class="row align-items-center">
+
+                        <div class="col-md-4">
+                            <div class="form-floating mb-3">
+                                <input id="txt_userprofile_FName" type="text" value="@ViewData["Login_FirstName"]" class="form-control" disabled />
+                                <label for="txt_userprofile_FName">First Name</label>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="form-floating mb-3">
+                                <input id="txt_userprofile_MName" type="text" value="@ViewData["Login_MiddleName"]" class="form-control" disabled />
+                                <label for="txt_userprofile_MName">Middle Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+
+                            <div class="form-floating mb-3">
+                                <input id="txt_userprofile_LName" type="text" value="@ViewData["Login_LastName"]" class="form-control" disabled />
+                                <label for="txt_userprofile_LName">Last Name</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                                @{
+                                    if (ViewData["Login_Gender"]!.ToString() == "M")
+                                    {
+                                                            <select type="" class="form-select" id="drpGender">
+                                                                <option value="0">Select Gender</option>
+                                                                <option value="M" selected>Male</option>
+                                                                <option value="F">Female</option>
+
+                                                            </select>
+                                    }
+                                    else if (ViewData["Login_Gender"]!.ToString() == "F")
+                                    {
+                                                            <select type="" class="form-select" id="drpGender">
+                                                                <option value="0">Select Gender</option>
+                                                                <option value="M">Male</option>
+                                                                <option value="F" selected>Female</option>
+
+                                                            </select>
+                                    }
+                                    else
+                                    {
+                                                            <select type="" class="form-select" id="drpGender">
+                                                                <option value="0">Select Gender</option>
+                                                                <option value="M">Male</option>
+                                                                <option value="F">Female</option>
+
+                                                            </select>
+                                    }
+                                }
+
+                                <label for="drpGender">Gender</label>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="row align-items-center">
+
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                                @{
+                                    if (ViewData["Login_EmailID"]!.ToString() != "")
+                                    {
+                                                            <input id="txt_login_emailID" type="email" class="form-control disabled" value="@ViewData["Login_EmailID"]" disabled/>
+                                    }
+                                    else
+                                    {
+                                        <input id ="txt_login_emailID" type="email" class="form-control" value="" disabled />
+                                    }
+                                }
+
+                                <label for="txt_login_emailID">EmailID</label>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="row align-items-center">
+
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                                @{
+                                    if (ViewData["Login_DOB"]!.ToString() != "")
+                                    {
+                                                            @Html.TextBox("txtDOB", ViewData["Login_DOB"], "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+                                        // <input id="txtDOB" type="text" class="form-control" value="@Convert.ToDateTime(ViewData["Login_DOB"]).ToString("MM/dd/yyyy")" disabled  />
+                                    }
+                                    else
+                                    {
+                                                            <input id="txtDOB" type="date" class="form-control" value="" />
+                                    }
+                                }
+
+                                <label for="floatingInput">Date Of Birth</label>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="row align-items-center">
+
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                                @{
+                                    if (ViewData["LoggedInType"]!.ToString() != "")
+                                    {
+
+                                         <input id="txtLoggedInType" type="text" class="form-control" value="@ViewData["LoggedInType"]!.ToString()" disabled />
+                                    }
+                                    else
+                                    {
+                                         <input id="txtLoggedInType" type="text" class="form-control" value="" />
+                                    }
+                                }
+
+                                <label for="txtLoggedInType">User Type</label>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="row align-items-center">
+
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                                @{
+                                    if (ViewData["Login_Designation"]!.ToString() != "")
+                                    {
+
+                                        <input id="txtLoggedDesignation" type="text" class="form-control" value="@ViewData["Login_Designation"]!.ToString()" disabled />
+                                    }
+                                    else
+                                    {
+                                        <input id="txtLoggedDesignation" type="text" class="form-control" value="" disabled />
+                                    }
+                                }
+
+                                <label for="txtLoggedDesignation">Designation</label>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="dx-card mb-3 text-center mt-3">
+                    <span class="dx-fieldset-header">Contact Information</span>
+                </div>
+                <div class="dx-card p-3 scroll-y-height-322">
+                    <div class="row align-items-center">
+
+                        <div class="col-md-4">
+                            <div class="form-floating mb-3">
+                                @if (ViewData["Login_Country"] != null && ViewData["Login_Country"]!.ToString() != "0")
+                                {
+                                    @* <input id="txt_Country" type="text" class="form-control" value="@ViewData["Login_CountryValue"]!.ToString()" disabled /> *@
+                                    <select id="drp_Country" disabled class="form-select" aria-label="Default select example">
+                                        @* <option selected>Open this select menu</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option> *@
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="drp_Country" onchange="BindState(this);" class="form-select" aria-label="Default select example">
+                                        @* <option selected>Open this select menu</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option> *@
+                                    </select>
+                                }
+                                
+                                <label for="drp_Country">Country</label>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating mb-3">
+                                @if (ViewData["Login_StateCode"] != null && ViewData["Login_StateCode"]!.ToString() != "0")
+                                {
+                                    <select disabled id="drp_State" onchange="BindCity(this);" class="form-select" aria-label="Default select example">
+                                        @* <option selected>Open this select menu</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option> *@
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="drp_State" onchange="BindCity(this);" class="form-select" aria-label="Default select example">
+                                        @* <option selected>Open this select menu</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option> *@
+                                    </select>
+                                }
+                                
+                                <label for="drp_State">State</label>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating mb-3">
+
+                                @if (ViewData["Login_CityCode"] != null && ViewData["Login_CityCode"]!.ToString() != "")
+                                {
+                                    
+
+                                    <select id="drp_City" disabled class="form-select" aria-label="Default select example">
+                                        @* <option selected>Open this select menu</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option> *@
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="drp_City" class="form-select" aria-label="Default select example">
+                                        @* <option selected>Open this select menu</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option> *@
+                                    </select>
+                                }
+
+                                
+                                <label for="drp_City">City</label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                                @{
+                                    if (ViewData["Login_PinCode"]!.ToString() != "")
+                                    {
+
+                                        <input id="txtLogin_PinCode" type="text" class="form-control" value="@ViewData["Login_PinCode"]!.ToString()" disabled />
+                                    }
+                                    else
+                                    {
+                                        <input id="txtLogin_PinCode" type="text" class="form-control" value="" />
+                                    }
+                                }
+
+                                <label for="txtLogin_PinCode">Postal / Zip Code</label>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="row align-items-center">
+
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                                @{
+                                    if (ViewData["Login_Current_Addr"]!.ToString() != "")
+                                    {
+
+                                        <textarea id="txtCurrentAddr" class="form-control" value="@ViewData["Login_Current_Addr"]!.ToString()" disabled>@ViewData["Login_Current_Addr"]!.ToString()</textarea>
+                                    }
+                                    else
+                                    {
+                                        <textarea id="txtCurrentAddr" class="form-control" value="@ViewData["Login_Current_Addr"]!.ToString()"></textarea>
+                                    }
+                                }
+
+                                <label for="txtCurrentAddr">
+                                    Current Address
+                                </label>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    
+                    <div class="row align-items-center">
+
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                                @if (@ViewData["Login_PhoneNumber"] != "")
+                                {
+                                    if (@ViewData["Login_PhoneNumber"].ToString().Contains("+"))
+                                    {
+                                        <input  type="tel" role="textbox" class="form-control" id="txt_Phone_Number" placeholder="Phone Number" disabled value="@ViewData["Login_PhoneNumber"]">
+                                    }
+                                    else
+                                    {
+                                        <input type="tel" role="textbox" class="form-control" id="txt_Phone_Number" placeholder="Phone Number" disabled value="@ViewData["Login_PhoneCode"] @ViewData["Login_PhoneNumber"]">
+                                    }
+                                     
+                                }
+                                else
+                                {
+                                    <input type="tel" role="textbox" class="form-control" id="txt_Phone_Number" placeholder="Phone Number" value="">
+                                }
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <div class="m-3 align-content-center">
+                    <button type="button" onclick="UpdateProfile();" class="btn1 btn-primary px-3 py-1 border-transparent">Update</button>
+                    <button type="button" class="btn1 btn-secondary px-3 py-1 border-transparent" onclick="RedirectToHome('@Url.Action("Home","OTMSPortal")')">Cancel</button>
+
+                </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,252 @@
+html {
+  font-size: 14px;
+}
+    html, body {
+        font-family: "proximanova", Helvetica, Arial, sans-serif;
+        
+        background: #f2f4f8 !important;
+    }
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+.footer[b-wqmwt8bgrb] {
+    /*position: absolute !important;*/
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: unset !important;
+}
+.footer {
+    position: absolute !important;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: unset !important;
+}
+.btn-XeTutKonnect {
+    
+    border-radius: 3.25rem;
+    font-size: 25px;
+}
+.btn-XeTutKonnect-primary {
+    color: #fff !important;
+    background: rgb(16, 193, 213);
+    background: linear-gradient(85deg, rgba(16, 193, 213, 1) 0%, rgba(42, 131, 255, 1) 100%);
+    transition: all .4s ease-in-out;
+}
+    .btn-XeTutKonnect-primary:hover {
+        background: rgba(42, 131, 255, 1);
+        background: linear-gradient(85deg, rgb(15, 174, 191) 0%, rgb(36 114 223) 100%);
+    }
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+.btn {
+    padding: 14px 47px;
+    border-radius: 78px;
+    border: none;
+}
+.Active-item {
+    font-weight: 700;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+    border-bottom-left-radius: 1.25rem !important;
+    border-bottom-right-radius: 1.25rem !important;
+    border-bottom-color: rgb(36 114 223);
+    border-bottom-style: solid;
+}
+.font-xetutglobalx-default {
+    font-size: var(--bs-body-font-size);
+}
+.pointer-cursor{
+    cursor: pointer;
+}
+.padd825 {
+    padding: 8px 25px !important;
+}
+.padd025 {
+    padding: 0px 25px !important;
+}
+html {
+  position: relative;
+  min-height: 100%;
+}
+.w-auto{
+    width: auto !important;
+}
+.XETutBody-display7 {
+    font-size: calc(1.375rem + 1.1vw);
+    font-weight: 300;
+    line-height: 1.2;
+}
+body {
+  margin-bottom: 60px;
+}
+.d-contents{
+    display :contents;
+}
+.XETutGlobalx-home-Logo {
+    width: 50px;
+}
+.XETutGlobalx-Logo {
+    width: 130px;
+}
+.XETutGlobalx-Logo2 {
+    width: 130px;
+}
+.XETutGlobalx-Logo-header {
+    width: 365px;
+}
+.XETutGlobalx-brand {
+    width: 300px;
+}
+.font22{
+    font-size: 22px;
+}
+.font20 {
+    font-size: 20px !important;
+}
+.XETutGlobalX-Signin {
+    display: flex;
+    align-items: center;
+}
+.XETutglobalX-Login-rounded{
+    border-radius: 1.25rem;
+}
+.card-header-rounded-top{
+    border-top-left-radius: 0.25rem !important;
+    border-top-right-radius: 0.25rem !important;
+}
+.rounded-oval-textbox{
+    border-radius: 1.3rem;
+    
+}
+.display-6-tagLine {
+    font-size: calc(1.375rem + 0.5vw);
+    font-weight: 300;
+    line-height: 1.2;
+}
+.pt-5rem{
+    padding-top: 5rem;
+}
+._OTMS-Background-playground-Courses {
+   
+    background: linear-gradient(180deg, gainsboro, #f2f4f8);
+    display: flex;
+    flex-direction: column;
+}
+.border-transparent {
+    border-color: transparent !important;
+}
+.iti {
+    display: unset !important;
+}
+.overflow-x-layout-body {
+    overflow-x: auto;
+    height: 71vh;
+}
+.overflow-x-layout-body1 {
+    overflow-x: auto;
+    height: 80vh;
+}
+.input-group-append {
+    cursor: pointer;
+}
+.col-width-240{
+    width: 240px!important;
+}
+.dropdown-menu-apax {
+    left: -130px !important;
+}
+@media(max-width: 980px){
+    .col-width-240 {
+        width: 76vw !important;
+    }
+   
+}
+@media(max-height: 1500px) {
+
+    .overflow-x-layout-body {
+        height: 90vh !important;
+    }
+}
+@media(max-height: 700px) {
+
+    .overflow-x-layout-body {
+        height: 71vh !important;
+    }
+}
+@media(max-height: 500px) {
+
+    .overflow-x-layout-body {
+        height: 60vh !important;
+    }
+}
+@media(max-height: 360px) {
+
+    .overflow-x-layout-body {
+        height: 50vh !important;
+    }
+}
+@media(max-height: 410px) {
+
+    .overflow-x-layout-body {
+        height: 57vh !important;
+    }
+}
+@media(max-height: 210px) {
+
+    .overflow-x-layout-body {
+        height: 30vh !important;
+    }
+}
+@media(max-height: 300px) {
+
+    .overflow-x-layout-body {
+        height: 46vh !important;
+    }
+}
+
+
+@media(max-width: 500px) {
+    .dropdown-menu-apax {
+        left: -136px !important;
+        width: 50vw !important;
+    }
+
+   
+}
+
+    @media(max-width: 400px) {
+        .dropdown-menu-apax {
+            left: -136px !important;
+            width: 50vw !important;
+        }
+      
+    }
+
+    @media (max-width: 280px) {
+        /* For mobile phones: */
+        .XETutGlobalx-Logo {
+            width: 280px;
+        }
+
+        #btnXETutGlobalX_Login, #btnReset {
+            padding: 6px 25px !important;
+        }
+
+        .pt-6rem {
+            padding-top: 6rem;
+        }
+
+        .col-width-240 {
+            width: 76vw !important;
+        }
+
+        .dropdown-menu-apax {
+            left: -136px !important;
+            width: 40vw !important;
+        }
+     
+    }

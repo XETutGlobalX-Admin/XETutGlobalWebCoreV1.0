@@ -1,0 +1,6 @@
+@XETutGlobalX.API_HostAddress = http://localhost:5117
+
+GET {{XETutGlobalX.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
